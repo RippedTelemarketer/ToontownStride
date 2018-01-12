@@ -3,7 +3,7 @@ from toontown.suit import *
 from toontown.toon import *
         self.rt = Suit.Suit()
         self.rtDNA = SuitDNA.SuitDNA()
-        self.rtDNA.newSuit(any cog id)
+        self.rtDNA.newSuit(any cog shortened name)
         self.rt.setDNA(self.bfsDNA)
         self.rt.setPickable(0)
         self.rt.addActive()
@@ -20,3 +20,80 @@ from toontown.toon import *
 #generateSuit() for rental for ripped telemarketer
         if dna.name == 'rt':
             self.makeRentalSuit('s')
+# setPlayerType MagicWord
+
+@magicWord(category=CATEGORY_COMMUNITY_MANAGER, types=[int])
+def setPlayerType(tagtype):
+    """
+    Clientsided Command to change your playertype. YOU MUST KNOW THE IDS, They are in NametagGlobals, and this belongs in Avatar.py
+    """
+    target = spellbook.getTarget()
+    if not 0 <= tagtype <= 8:
+        simbase.air.writeServerEvent('aboose', spellbook.getInvoker().doId, 'Someone tried to use an invalid tagtype!')
+        return "Whoops! This type doesn't exist! You used " + tagtype + ", which is invalid. Your request has been logged."
+    else:
+        target.setPlayerType(tagtype)
+        return 'Success!'
+# You know how I used Ripped telemarketer Cog Codes? Well, here's the SuitGlobals for it!
+'rt': (5.25 / aSize, SuitDNA.salesPolyColor, ['telemarketer'], '', 6.95),
+#Here's localizer stuff
+SuitTheRippedOne = 'Ripped Telemarketer'
+SuitTheRippedOneP = 'Ripped Telemarketers'
+SuitTheRippedOneS = 'a Ripped Telemarketer'
+#Brushoffs
+'rt': ["Nope, not this time."]
+
+#Sample Panda3D Project (needs TT resources)
+
+from direct.actor.Actor import Actor
+from pandac.PandaModules import *
+from direct.task import Task
+import math
+from math import pi, sin, cos
+from direct.showbase.ShowBase import ShowBase
+from direct.task import Task
+from direct.interval.IntervalGlobal import Sequence
+from pandac.PandaModules import Point3
+from pandac.PandaModules import *
+  
+import direct.directbase.DirectStart
+from panda3d.core import *
+from direct.gui.OnscreenText import OnscreenText
+from direct.actor.Actor import Actor
+from direct.showbase.DirectObject import DirectObject
+from panda3d.core import loadPrcFileData
+from direct.interval.IntervalGlobal import *
+
+terrain = loader.loadModel('phase_12/models/bossbotHQ/CogGolfLobby.bam')
+terrain.reparentTo(render)
+
+cog = Actor("phase_3.5/models/char/suitA-mod.bam", {"effort":"phase_5/models/char/suitA-landing.bam", "sit-angry":"phase_12/models/char/suitA-sit-angry.bam", "glower":"phase_5/models/char/suitA-glower.bam", "anvild":"phase_5/models/char/suitA-anvil-drop.bam"})
+cog.reparentTo(render)
+cog.loop('effort')
+cog.setH(180.00)
+head = loader.loadModel("phase_4/models/char/suitB-heads.bam").find('**/telemarketer')
+jointhd = cog1.find('**/joint_head')
+head.reparentTo(jointhd)
+cog.setPlayRate(-1, 'effort')
+texturepls = loader.loadTexture('phase_3.5/maps/tt_t_ene_sellbotRental_blazer.jpg')
+cog.findAllMatches('**/torso').setTexture(texturepls, 1)
+texturepls2 = loader.loadTexture('phase_3.5/maps/tt_t_ene_sellbotRental_leg.jpg')
+cog.findAllMatches('**/legs').setTexture(texturepls2, 1)
+texturepls3 = loader.loadTexture('phase_3.5/maps/tt_t_ene_sellbotRental_sleeve.jpg')
+cog.findAllMatches('**/arms').setTexture(texturepls3, 1)
+cog.setY(-49.87)
+Icons = cog1.find('**/joint_attachMeter')
+Icon = loader.loadModel('phase_3/models/gui/cog_icons.bam').find('**/SalesIcon').copyTo(Icons)
+Icon.setH(180.00)
+Icon.setScale(0.5)
+
+
+base.oobe()
+camera.hide()
+run()
+
+#GetLoseActor fix
+                if self.isWaiter:
+                    self.makeWaiter(self.loseActor)
+                elif self.isRental:
+                    self.makeRentalSuit(self.loseActor)
