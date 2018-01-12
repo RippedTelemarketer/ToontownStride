@@ -1,0 +1,22 @@
+# ripped telemarketer in ttc
+from toontown.suit import *
+from toontown.toon import *
+        self.rt = Suit.Suit()
+        self.rtDNA = SuitDNA.SuitDNA()
+        self.rtDNA.newSuit(any cog id)
+        self.rt.setDNA(self.bfsDNA)
+        self.rt.setPickable(0)
+        self.rt.addActive()
+        self.rt.reparentTo(render)
+        self.rt.initializeBodyCollisions('suit')
+        self.rt.setPos(137.889, -70.906, 2.525)
+        self.rt.setH(114.909)
+        self.rt.loop('neutral')
+#new generateHead()
+        if headType == 'telemarketer' and self.style.body == 'a':
+            filepath = 'phase_4/models/char/suitB-heads'
+        else:
+            filepath = 'phase_' + str(phase) + filePrefix + 'heads'
+#generateSuit() for rental for ripped telemarketer
+        if dna.name == 'rt':
+            self.makeRentalSuit('s')
